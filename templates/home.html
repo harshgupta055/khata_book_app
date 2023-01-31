@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Home</title>
+<style>
+    tbody {
+        font-size: 12px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container" id="main">
+    <div class="row mt-4">
+        <div class="col-6">
+            <div class="container border rounded p-2">
+                <h6 class="text-danger text-center">Given</h6>
+                <h6 class="text-danger text-center mb-0">₹{{given_wage}}</h6>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="container border rounded p-2">
+                <h6 class="text-success text-center">Wages</h6>
+                <h6 class="text-success text-center mb-0">₹{{spend_wage}}</h6>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h5 class="text-secondary pb-3 text-center">Hi, <span class="text-dark fw-bold">{{request.user.first_name}}
+                {{request.user.last_name}}</span></h5>
+        <table class="table table-success table-striped rounded">
+            <thead>
+                <tr>
+                    <th scope="col">Your Workers</th>
+                    <th scope="col">Salary/Month</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for w in workers %}
+                <tr>
+                    <th scope="row"><a href="{% url 'worker' w.id %}" class="text-decoration-none">{{w.name}}</a></th>
+                    <td>₹{{w.salary}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% for message in messages %}
+    {% if message.tags == "success" %}
+    <h6 id="messages" class="text-center mt-4 text-primary">{{message}}</h6>
+    {% elif message.tags == "error" %}
+    <h6 id="messages" class="text-center mt-4 text-danger">{{message}}</h6>
+    {% endif %}
+    {% endfor %}
+    <div class="container fixed-bottom px-0">
+        <button class="btn btn-primary w-100 rounded-0 btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal">Add
+            Worker</button>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Worker</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Name*</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput1"
+                                placeholder="Worker's name" required name="name" pattern="[a-zA-Z]{2}[a-zA-Z\s]{0,}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput2" class="form-label">Phone</label>
+                            <input type="number" class="form-control" id="exampleFormControlInput2"
+                                placeholder="Worker's phone number" name="phone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput3" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="exampleFormControlInput3"
+                                placeholder="Worker's email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput4" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput4"
+                                placeholder="Worker's address" name="address">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput5" class="form-label">Salary/month*</label>
+                            <input type="number" class="form-control" min="500" id="exampleFormControlInput5"
+                                placeholder="Worker's salary per month" required name="salary">
+                        </div>
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput6" class="form-label">Date of joining*</label>
+                            <input type="date" class="form-control" id="exampleFormControlInput6"
+                                placeholder="Worker's date of joining" required name="doj">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<title>Login</title>
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+
+{% block body %}
+<div class="container p-3 d-flex justify-content-center align-items-center" id="main">
+    <div class="container mt-5">
+        <div class="d-flex justify-content-center mb-3">
+            <img src="{% static 'images/logo.jpeg' %}" alt="" class="rounded rounded-circle" height="100px"
+                width="100px">
+        </div>
+        <h1 class="text-center border-bottom border-1 pb-3">Welcome to <span class="fw-bold text-success">LG's Khata
+                Book!</span></h1>
+        <h4 class="text-center mt-4">LOGIN</h4>
+        <div class="container border shadow rounded mt-4 p-4">
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Phone</label>
+                    <input type="number" class="form-control" name="phone" id="exampleFormControlInput1"
+                        placeholder="Enter 10-digits phone number" required>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput2" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="exampleFormControlInput2"
+                        placeholder="Your password">
+                </div>
+                <div class="container d-flex justify-content-center mt-4">
+                    <button type="submit" class="btn-primary btn">Submit</button>
+                </div>
+            </form>
+        </div>
+        {% for message in messages %}
+
+        <h6 id="messages" class="text-center mt-4 text-danger">{{message}}</h6>
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
