@@ -92,6 +92,12 @@
                     <td>- ₹{{w.amount}}</td>
                     <td>{{w.reason}}</td>
                 </tr>
+                {% elif w.type == "LEAVE" %}
+                <tr class="table-warning">
+                    <th scope="row">{{w.date|date:"d/m/Y"}}</th>
+                    <td>- ₹{{w.amount}}</td>
+                    <td>{{w.reason}}</td>
+                </tr>
                 {% else %}
                 <tr>
                     <th scope="row">{{w.date|date:"d/m/Y"}}</th>
@@ -259,6 +265,13 @@
                                     <td>- ₹${parseFloat(value.amount)}</td>
                                     <td>${value.reason}</td>
                                 </tr>`
+                    }
+                    else if (value.type == "LEAVE"){
+                        var y = `<tr class="table-warning">
+                            <th scope="row">${value.date}</th>
+                            <td>+ ₹${parseFloat(value.amount)}</td>
+                            <td>${value.reason}</td>
+                        </tr>`
                     }
                     else {
                         var y = `<tr>
