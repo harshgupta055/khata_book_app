@@ -7,9 +7,11 @@ import datetime
 from django.db.models import Avg, Count, Min, Sum
 from .serializers import DailyWageSerializer
 from .decorators import unauthenticated_user
-from .models import Worker, DailyWage, MonthWageGiven
+from .models import Worker, DailyWage, MonthWageGiven, CustomUser
 from django.views.decorators.csrf import csrf_exempt
 from calendar import monthrange
+
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -47,6 +49,18 @@ def home(request):
                             address=address, salary=float(salary), doj=doj)
         try:
             worker_obj.save()
+            doj_date = datetime.datetime.strptime(doj, "%Y-%m-%d")
+            current_date = datetime.datetime.now()
+            num_days = monthrange(current_date.year, current_date.month)[1]
+            if doj_date.date() == current_date.date() and current_date.time().hour >= 20:
+                DailyWage.objects.create(worker_id=worker_obj.id, amount=round(worker_obj.salary/num_days, 2), type="SPEND", date=doj)
+            elif doj_date.date() < current_date.date():
+                delta = datetime.timedelta(days=1)
+                start_date = doj_date.date()
+                sal = round(worker_obj.salary/num_days, 2)
+                while start_date < current_date.date() or (start_date == current_date.date() and current_date.time().hour >= 20):
+                    DailyWage.objects.create(worker_id=worker_obj.id, amount=sal, type="SPEND", date=start_date)
+                    start_date += delta
             messages.success(request, "Worker added successfully!")
         except Exception as e:
             print(e)
@@ -197,3 +211,15 @@ def updatePayment(request):
         mon_wage.save()
         messages.success(request, "Payment done for "+monYearString)
         return JsonResponse({"data": "data"})
+
+
+@login_required(login_url='/')
+def profile(request):
+    if request.method == "POST":
+        password = request.POST.get("password")
+        user_obj = CustomUser.objects.filter(phone=request.user.phone).first()
+        user_obj.set_password(password)        
+        user_obj.save()
+        messages.success(request, "Your password has been updated. Please login again!")
+        return redirect('login')
+    return render(request, 'profile.html', context={})

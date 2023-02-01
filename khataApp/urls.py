@@ -9,5 +9,6 @@ urlpatterns = [
     path('monthWage/', views.monthWages, name='monthWage'),
     path('updateProfile/', views.updateProfile, name='updateProfile'),
     path("updateGiven/", views.updateGiven, name='updateGiven'),
-    path('updatePayment/', views.updatePayment, name='updatePayment')
+    path('updatePayment/', views.updatePayment, name='updatePayment'),
+    path('profile/', views.profile, name='profile'),
 ]

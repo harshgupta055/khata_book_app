@@ -36,9 +36,11 @@
             </form>
         </div>
         {% for message in messages %}
-
+        {% if message.tags == "success" %}
+        <h6 id="messages" class="text-center mt-4 text-primary">{{message}}</h6>
+        {% elif message.tags == "error" %}
         <h6 id="messages" class="text-center mt-4 text-danger">{{message}}</h6>
-
+        {% endif %}
         {% endfor %}
     </div>
 </div>
