@@ -9,7 +9,8 @@ def add_daily_wage():
     workers = Worker.objects.all()
     for worker in workers:
         if worker.working_status == "WORKING":
-            DailyWage.objects.create(worker_id=worker.id, amount=round(worker.salary/num_days, 2), date=current_date, type='SPEND')
+            if not DailyWage.objects.filter(worker_id=worker.id, date=current_date, type="LEAVE").first():
+                DailyWage.objects.create(worker_id=worker.id, amount=round(worker.salary/num_days, 2), date=current_date, type='SPEND')
 
 
 def test_func():

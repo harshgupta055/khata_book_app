@@ -47,6 +47,10 @@
     {% else %}
     <a href="#" class="btn btn-outline-primary w-100 mt-2"><i style="font-size:24px" class="fa">&#xf095;</i></a>
     {% endif %}
+
+    <button type="button" class="btn btn-outline-success w-100 mt-2" data-bs-toggle="modal"
+                data-bs-target="#updateProfileModal">Update Profile</button>
+
     <div class="container">
         <div class="row mt-4">
             <div class="col-6">
@@ -113,7 +117,7 @@
             <button type="button" class="btn btn-danger w-100 rounded-0" data-bs-toggle="modal"
                 data-bs-target="#addGivenModal">Update Given</button>
             <button type="button" class="btn btn-warning w-100 rounded-0" data-bs-toggle="modal"
-                data-bs-target="#updateProfileModal">Update Profile</button>
+                data-bs-target="#addLeaveModal">Add Leave</button>
         </div>
     </div>
 </div>
@@ -129,6 +133,7 @@
                 <form action="{% url 'updateGiven' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{worker.id}}">
+                    <input type="hidden" name="type" value="GIVEN">
                     <div class="mb-3">
                         <label for="date" class="form-label">Date*</label>
                         <input type="date" class="form-control" id="date" placeholder="Select date for payment done"
@@ -153,11 +158,40 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="addLeaveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-warning fw-bold" id="exampleModalLabel">Add Leave</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'updateGiven' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{worker.id}}">
+                    <input type="hidden" name="type" value="LEAVE">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date*</label>
+                        <input type="date" class="form-control" id="date" placeholder="Select date for payment done"
+                            required name="date">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-warning">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5 text-warning fw-bold" id="exampleModalLabel">Update Profile</h1>
+                <h1 class="modal-title fs-5 text-success fw-bold" id="exampleModalLabel">Update Profile</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -191,7 +225,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-warning">Update</button>
+                        <button type="submit" class="btn btn-success">Update</button>
                     </div>
                 </form>
             </div>

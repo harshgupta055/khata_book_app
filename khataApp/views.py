@@ -9,8 +9,7 @@ from .serializers import DailyWageSerializer
 from .decorators import unauthenticated_user
 from .models import Worker, DailyWage, MonthWageGiven
 from django.views.decorators.csrf import csrf_exempt
-
-from django.db.models import F, Func, Value, CharField
+from calendar import monthrange
 
 # Create your views here.
 
@@ -144,8 +143,10 @@ def updateProfile(request):
             worker_obj.email = email
             worker_obj.address = address
             if worker_obj.salary != float(salary):
-                DailyWage.objects.filter(date__month=datetime.datetime.now(
-                ).month, type='SPEND').update(amount=round(float(salary)/30, 2))
+                current_date = datetime.datetime.now().date()
+                num_days = monthrange(current_date.year, current_date.month)[1]
+                DailyWage.objects.filter(date__month=current_date.month, type='SPEND').update(amount=round(float(salary)/num_days, 2))
+                DailyWage.objects.filter(date__month=current_date.month, type='LEAVE').update(amount=round(float(salary)/30, 2))
                 worker_obj.salary = float(salary)
             worker_obj.save()
             messages.success(request, "Profile updated successfully!")
@@ -162,8 +163,20 @@ def updateGiven(request):
         date = request.POST.get("date")
         amount = request.POST.get("amount")
         reason = request.POST.get("reason")
-        dw_obj = DailyWage(worker_id=id, amount=amount,
-                           date=date, reason=reason, type='GIVEN')
+        type = request.POST.get("type")
+        worker_obj = Worker.objects.filter(id=id).first()
+        if type == "GIVEN":
+            dw_obj = DailyWage(worker_id=id, amount=amount,
+                            date=date, reason=reason, type='GIVEN')
+        elif type == "LEAVE":
+            dw_obj = DailyWage.objects.filter(worker_id=id, date=date, type="SPEND").first()
+            if dw_obj:
+                dw_obj.type = "LEAVE"
+                dw_obj.reason = "LEAVE"
+                dw_obj.amount = round(worker_obj.salary/30, 2)
+            else:
+                dw_obj = DailyWage(worker_id=id, amount=round(worker_obj.salary/30, 2),
+                                date=date, reason="LEAVE", type='LEAVE')
         dw_obj.save()
         messages.success(request, "Amount added successfully!")
         return redirect('/worker/'+id+'/')

@@ -76,6 +76,7 @@ class DailyWage(models.Model):
     TYPE_CHOICES = [
         ("SPEND", "SPEND"),
         ("GIVEN", "GIVEN"),
+        ("LEAVE", "LEAVE"),
     ]
     id = models.AutoField(primary_key=True)
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE, related_name="daily_wage")
