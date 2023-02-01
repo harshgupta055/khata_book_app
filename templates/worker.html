@@ -88,19 +88,19 @@
                 {% for w in wages %}
                 {% if w.type == "GIVEN" %}
                 <tr class="table-danger">
-                    <th scope="row">{{w.date|date:"d/m/Y"}}</th>
+                    <th scope="row">{{w.date|date:"Y-m-d"}}</th>
                     <td>- ₹{{w.amount}}</td>
                     <td>{{w.reason}}</td>
                 </tr>
                 {% elif w.type == "LEAVE" %}
                 <tr class="table-warning">
-                    <th scope="row">{{w.date|date:"d/m/Y"}}</th>
+                    <th scope="row">{{w.date|date:"Y-m-d"}}</th>
                     <td>- ₹{{w.amount}}</td>
                     <td>{{w.reason}}</td>
                 </tr>
                 {% else %}
                 <tr>
-                    <th scope="row">{{w.date|date:"d/m/Y"}}</th>
+                    <th scope="row">{{w.date|date:"Y-m-d"}}</th>
                     <td>+ ₹{{w.amount}}</td>
                     <td>{{w.reason}}</td>
                 </tr>
