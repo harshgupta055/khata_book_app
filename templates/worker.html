@@ -248,7 +248,7 @@
     document.getElementById("month").value = `${year}-${month}`
     function getMonth(id) {
         var date = document.getElementById("month").value
-        $.post("http://127.0.0.1:8000/monthWage/",
+        $.post(window.location.origin + "/monthWage/",
             {
                 id: id,
                 date: date,
@@ -297,7 +297,7 @@
     function paymentUpdate(id) {
         var date = document.getElementById("month").value
         console.log(document.getElementById("givenMoney").innerText)
-        $.post("http://127.0.0.1:8000/updatePayment/",
+        $.post(window.location.origin + "/updatePayment/",
             {
                 id: id,
                 date: date,
